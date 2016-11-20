@@ -1,0 +1,11 @@
+{
+  "port": 8000,
+  "interval": 500,
+  "delay": 0,
+  "host": "localhost",
+  "serveDir": "dist",
+  "watchexps": [
+    "dist/**.js # echo =BEGIN= && node dist/test.js && echo =END="
+  ],
+  "quite": true
+}
