@@ -75,6 +75,11 @@ export class LazyMoreFilter {
                     return this.match(filter, fieldValues);
                 }
             });
+            let sortFields = filter.sortFields;
+            let sortOrders = filter.sortOrders || [];
+            if(this.isValidSortParms(sortFields, sortOrders)) {
+                filterProcess = filterProcess.orderBy<string>(sortFields, sortOrders);
+            }
         });
         return filterProcess;
     }
@@ -98,6 +103,13 @@ export class LazyMoreFilter {
             return results.reduce((r1, r2) => { return r1 && r2 } )
         }
         return results.reduce((r1, r2) => { return r1 || r2 });
+    }
+
+    private isValidSortParms(sortFields: string[], sortOrders: string[]) {
+        if(_.isNil(sortFields) || !sortFields.length || (sortOrders.length > sortFields.length)) {
+            return false;
+        }
+        return true;
     }
 
     public printFilteredData() {
@@ -134,10 +146,13 @@ export interface Filter {
     name: string;
     fields: string[];
     key: any;
+    sortFields?: string[]; // e.g. ['name', 'age]
+    sortOrders?: string[]; // e.g. ['asc', 'desc']
     // basic type filter conditions
     allFiledsMatch? :boolean;
     caseSensitive?: boolean;
     wholeMatch?: boolean;
     // custom type filter condition
     matchFun?: (fieldValues: any[], key: any) => boolean;
+    // sort data
 }

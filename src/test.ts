@@ -12,15 +12,6 @@ export interface User {
 
 // test data
 let data: User[] = [
-    { name: 'Jack', age: 10, sex: true,  address: 'Luoyuan, Fuzhou, China'   },
-    { name: 'Lomo', age: 11, sex: null,  address: 'Minhou, Fuzhou, China'    },
-    { name: 'Neil', age: 13, sex: true,  address: 'Lianjian, Fuzhou, China'  },
-    { name: 'Rive', age: 14, sex: false, address: 'Sibei, Xiamen, China'     },
-    { name: 'Aice', age: 15, sex: true,  address: 'Tongan, Xiamen, China'    },
-    { name: 'Fran', age: 16, sex: null,  address: 'Pudong, Shanghai, China'  },
-    { name: 'Opet', age: 17, sex: false, address: 'Huinan, Shanghai, China'  },
-    { name: 'Afff', age: 20, sex: true,  address: 'New York, US, America'    },
-    { name: 'Hsda', age: 21, sex: false, address: 'Shaba, Jilongpo, Malaxiya'},
     { name: 'Sssa', age: 22, sex: true  },
     { name: 'Mary', age: 12, sex: true  },
     { name: 'Adds', age: 18, sex: true  },
@@ -28,7 +19,19 @@ let data: User[] = [
     { name: 'Bsss', age: 23, sex: false },
     { name: 'Twsa', age: 24, sex: null  },
     { name: 'Asss', age: 25, sex: false },
-    { name: 'Dsdf', age: 26, sex: false }
+    { name: 'Dsdf', age: 26, sex: false },
+    { name: 'Jack', age: 10, sex: true,  address: 'Luoyuan, Fuzhou, China'   },
+    { name: 'Lomo', age: 11, sex: null,  address: 'Minhou, Fuzhou, China'    },
+    { name: 'Neil', age: 13, sex: true,  address: 'Lianjian, Fuzhou, China'  },
+    { name: 'Rive', age: 14, sex: false, address: 'Sibei, Xiamen, China'     },
+    { name: 'Bice', age: 15, sex: true,  address: 'Tongan, Xiamen, China'    },
+    { name: 'Aicx', age: 15, sex: true,  address: 'Tongan, Xiamen, China'    },
+    { name: null, age: 15, sex: true,  address: 'Tongan, Xiamen, China'    },
+    { name: 'Ssia', age: 15, sex: true,  address: 'Tongan, Xiamen, China'    },
+    { name: 'Fran', age: 16, sex: null,  address: 'Pudong, Shanghai, China'  },
+    { name: 'Opet', age: 17, sex: false, address: 'Huinan, Shanghai, China'  },
+    { name: 'Afff', age: 20, sex: true,  address: 'New York, US, America'    },
+    { name: 'Hsda', age: 21, sex: false, address: 'Shaba, Jilongpo, Malaxiya'},
 ];
 
 let filter1: Filter = { name: 'filter1', fields: ['name'], key: 'A', caseSensitive: false, wholeMatch: false }
@@ -72,29 +75,57 @@ let addressMatchFun =  (fieldValues, key) => {
 
 let filter9: Filter = { name: 'filter9', fields: ['address'], key: 'Luoyuan China', matchFun: addressMatchFun }
 
+// sort test case
+
+let filter10: Filter = { 
+    name: 'filter10', 
+    fields: ['age'], 
+    key: { max: 25, min: 10 }, 
+    matchFun: ageMatchFun, 
+    sortFields: ['age', 'name'], 
+    sortOrders: ['desc', 'asc'] 
+} // ok
+
+let filter11: Filter = { 
+    name: 'filter11', 
+    fields: ['age'], 
+    key: { max: 25, min: 10 }, 
+    matchFun: ageMatchFun, 
+    sortOrders: ['desc', 'asc'] 
+} // failed, sortFields is undefined/null
+
+let filter12: Filter = { 
+    name: 'filter12', 
+    fields: ['age'], 
+    key: { max: 25, min: 10 }, 
+    matchFun: ageMatchFun, 
+    sortFields: ['age', 'name']
+} // ok
+
+let filter13: Filter = { 
+    name: 'filter13', 
+    fields: ['age'], 
+    key: { max: 25, min: 10 }, 
+    matchFun: ageMatchFun, 
+    sortFields: ['age', 'name'], 
+    sortOrders: ['desc', 'asc', 'desc'] 
+} // failed, sortOrders.length > sortFields.length
+
+let filter14: Filter = { 
+    name: 'filter14', 
+    fields: ['age'], 
+    key: { max: 25, min: 10 }, 
+    matchFun: ageMatchFun, 
+    sortFields: [], 
+} // failed, sortFields.length is 0
+
 // ...
 
 function test() {
-
     // example
     let lazyMoreFilter = new LazyMoreFilter(data);
-    lazyMoreFilter.addFilter(filter1)
-                  .addFilter(filter2)
-                  .removeFilter('filter1')
-                  .addFilter(filter3)
-                  .addFilter(filter4)
-                  .removeFilter('filter5')
-                  .removeFilter('filter3')
-                  .addFilter(filter5)
-                  .removeAllFilters()
-                  .addFilter(filter6)
-                  .addFilter(filter7)
-                  .addFilter(filter4).addFilter(filter8)
-                  .removeAllFilters()
-                  .addFilter(filter2)
-                  .removeAllFilters()
-                  .addFilter(filter9)
-                  .removeAllFilters().printInfo();
+    lazyMoreFilter.addFilter(filter14)
+                  .printInfo();
 }
 
 test();
