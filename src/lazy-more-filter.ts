@@ -154,5 +154,4 @@ export interface Filter {
     wholeMatch?: boolean;
     // custom type filter condition
     matchFun?: (fieldValues: any[], key: any) => boolean;
-    // sort data
 }
